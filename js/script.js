@@ -12,7 +12,13 @@ $.ajax({
     // console.log(data);
     apiObj = data;
     for(let i = 0; i < apiObj.data.length; i++){
-        console.log(`${apiObj.data[i].profile.first_name} ${apiObj.data[i].profile.last_name}: ${apiObj.data[i].insurances[0].insurance_provider.name}`)
+        // apiObj.data[i].insurance.forEach(element => {
+        for(let x = 0; x < apiObj.data[i].insurances.length; x++){    
+            if(apiObj.data[i].insurances[x].insurance_provider.name.includes('Medicare')){
+                console.log(`${apiObj.data[i].profile.first_name} ${apiObj.data[i].profile.last_name}`);
+            }
+        };
+        // console.log(`${apiObj.data[i].profile.first_name} ${apiObj.data[i].profile.last_name}: ${apiObj.data[i].insurances[0].insurance_provider.name}`)
     }
 });
 
