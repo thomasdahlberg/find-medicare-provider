@@ -415,14 +415,18 @@ Object.keys(specialtiesOptions).forEach(element =>
     $('select').prepend(`<option value="${element}">${specialtiesOptions[element]}</options>`));
 $('select').prepend(`<option value="" disabled selected>Choose your option</option>`);
 
+
 $('a').on('click', (event)=>{
+    event.preventDefault();
     console.log(event.target);
+    console.log($('input').val());
     $.ajax({
         url: `https://api.betterdoctor.com/2016-03-01/doctors?location=${latitude},${longitude},100&skip=2&limit=${limit}&user_key=${apiKey}`,
         type: "GET",
     }).then(function(data){
         apiObj = data;
         console.log(apiObj);
+        console.log($('select'));
         for(let i = 0; i < apiObj.data.length; i++){
             for(let x = 0; x < apiObj.data[i].insurances.length; x++){    
                 if(apiObj.data[i].insurances[x].insurance_provider.name.includes('Medicare')){
