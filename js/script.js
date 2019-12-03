@@ -401,7 +401,7 @@ let specialtiesOptions = {
 
 // API GET that pulls location data of user
 $.ajax({
-    url: `http://api.ipstack.com/check?access_key=fef26ea7f3f8cb548a3b9cafbf91346c`,
+    url: `https://api.ipstack.com/check?access_key=fef26ea7f3f8cb548a3b9cafbf91346c`,
     type: "GET",
 }).then(function(data) {
     // console.log(data);
