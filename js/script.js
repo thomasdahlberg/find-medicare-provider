@@ -423,7 +423,7 @@ $('#find').on('click', (event)=>{
     event.preventDefault();
     let specialtyInput = $('input').val();
     medicareDocs = [];
-    $('a.collection-item').remove();
+    $('li.docs').remove();
     $.ajax({
         url: `https://api.betterdoctor.com/2016-03-01/doctors?location=${latitude},${longitude},100&skip=2&limit=${limit}&user_key=${apiKey}`,
         type: "GET",
@@ -442,27 +442,36 @@ $('#find').on('click', (event)=>{
 //Cleans up API data: Removes Objs w/o Specialty and dedupes medicareDocs
         removeEmptySpecialty(medicareDocs);
         deduplicate(medicareDocs,'npi');
-        
+        console.log(medicareDocs);
 //Search Logic for returning doctor data to user based on specialty
         if(specialtyInput === "All Medicare Providers"){
             // console.log(specialtyInput);
             // console.log(medicareDocs.length);
             for(let y = 0; y < medicareDocs.length; y++){
-                $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}</a>`);
+                $("ul.collapsible").prepend(`<li class="docs">
+                                                <div class="collapsible-header"><strong>${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[y].specialties[0].name}</em></div>
+                                                <div class="collapsible-body"><span><strong>${medicareDocs[y].practices[0].name}</strong></span></div>
+                                            </li>`);
                 // console.log(`${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}`);
             }
         } else {
             for(let z = 0; z < medicareDocs.length; z++){
                 if(medicareDocs[z].specialties[0].name.includes(specialtyInput)){
-                    $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}</a>`);
+                    $("ul.collapsible").prepend(`<li class="docs">
+                                                    <div class="collapsible-header"><strong>${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[z].specialties[0].name}</em></div>
+                                                    <div class="collapsible-body"><span><strong>${medicareDocs[z].practices[0].name}</strong></span></div>
+                                                </li>`);
                         // console.log(`${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}`);
                     }
                 }
-            if($('a.collection-item').length === 0){
+            if($('li.docs').length === 0){
                 alert('No providers found for that specialty. Below is a list of General Practitioners in your area.');
                 for(let a = 0; a < medicareDocs.length; a++){
                     if(medicareDocs[a].specialties[0].name === "Internal Medicine" || medicareDocs[a].specialties[0].name === "Family Medicine"){
-                        $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[a].specialties[0].name}: ${medicareDocs[a].profile.first_name} ${medicareDocs[a].profile.last_name} - ${medicareDocs[a].practices[0].phones[0].number}</a>`);
+                        $("ul.collapsible").prepend(`<li class"docs">
+                                                        <div class="collapsible-header"><strong>${medicareDocs[a].profile.first_name} ${medicareDocs[a].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[a].specialties[0].name}</em></div>
+                                                        <div class="collapsible-body"><span><strong>${medicareDocs[a].practices[0].name}</strong></span></div>
+                                                    </li>`);
                     }
                 }
             }
