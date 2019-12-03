@@ -441,13 +441,13 @@ $('a').on('click', (event)=>{
             console.log(specialtyInput);
             console.log(medicareDocs.length);
             for(let y = 0; y < medicareDocs.length; y++){
+                $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}</a>`);
                 console.log(`${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}`);
             }
         } else {
             for(let z = 0; z < medicareDocs.length; z++){
-                // if(medicareDocs[z].specialties){
-                //     if(medicareDocs[z].specialties.name.includes(undefined))return;
                         if(medicareDocs[z].specialties[0].name.includes(specialtyInput)){
+                            $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}</a>`);
                             console.log(`${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}`);
                         }
                 
