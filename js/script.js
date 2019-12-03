@@ -414,6 +414,10 @@ $(document).ready(function(){
     $('select').formSelect();
 });
 
+$(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+
 Object.keys(specialtiesOptions).forEach(element =>
     $('select').prepend(`<option value="${element}">${specialtiesOptions[element]}</options>`));
 $('select').prepend(`<option value="" disabled selected>All Medicare Providers</option>`);
