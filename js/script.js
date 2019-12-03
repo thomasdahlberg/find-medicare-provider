@@ -420,6 +420,7 @@ $('select').prepend(`<option value="" disabled selected>Choose your option</opti
 $('a').on('click', (event)=>{
     event.preventDefault();
     let specialtyInput = $('input').val();
+    medicareDocs = [];
     $.ajax({
         url: `https://api.betterdoctor.com/2016-03-01/doctors?location=${latitude},${longitude},100&skip=2&limit=${limit}&user_key=${apiKey}`,
         type: "GET",
@@ -440,14 +441,14 @@ $('a').on('click', (event)=>{
             console.log(specialtyInput);
             console.log(medicareDocs.length);
             for(let y = 0; y < medicareDocs.length; y++){
-                console.log(`${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name}: ${medicareDocs[y].practices[0].phones[0].number}`);
+                console.log(`${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}`);
             }
         } else {
             for(let z = 0; z < medicareDocs.length; z++){
                 // if(medicareDocs[z].specialties){
                 //     if(medicareDocs[z].specialties.name.includes(undefined))return;
                         if(medicareDocs[z].specialties[0].name.includes(specialtyInput)){
-                            console.log(`${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name}: ${medicareDocs[z].practices[0].phones[0].number}`);
+                            console.log(`${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}`);
                         }
                 
             }
