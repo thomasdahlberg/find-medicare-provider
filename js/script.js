@@ -1,6 +1,7 @@
 let apiKey = 'e207638b02ecb23dabc2848f0b3931f6';
 let limit = 100;
-let apiObj, latitude, longitude; 
+let apiObj, latitude, longitude;
+let medicareDocs = [];
 let specialtiesOptions = {
     0: "Women's Health Nurse Practitioner",
     1: "Vision Therapy",
@@ -418,21 +419,46 @@ $('select').prepend(`<option value="" disabled selected>Choose your option</opti
 
 $('a').on('click', (event)=>{
     event.preventDefault();
-    console.log(event.target);
-    console.log($('input').val());
+    let specialtyInput = $('input').val();
     $.ajax({
         url: `https://api.betterdoctor.com/2016-03-01/doctors?location=${latitude},${longitude},100&skip=2&limit=${limit}&user_key=${apiKey}`,
         type: "GET",
     }).then(function(data){
         apiObj = data;
-        console.log(apiObj);
-        console.log($('select'));
+        // console.log(apiObj.data[0].specialties[0].name);
+        // console.log($('select'));
         for(let i = 0; i < apiObj.data.length; i++){
             for(let x = 0; x < apiObj.data[i].insurances.length; x++){    
-                if(apiObj.data[i].insurances[x].insurance_provider.name.includes('Medicare')){
-                    console.log(`${apiObj.data[i].profile.first_name} ${apiObj.data[i].profile.last_name}: ${apiObj.data[i].specialties[0].name}, ${apiObj.data[i].practices[0].phones[0].number}`);
+                if(apiObj.data[i].insurances[x].insurance_provider.name.includes('Medicare') && apiObj.data[i].specialties[0]){
+                    medicareDocs.push(apiObj.data[i]);
                 }
+            }
+        }
+        removeEmptySpecialty(medicareDocs);
+        console.log(medicareDocs);
+        if(specialtyInput === "Choose your option"){
+            console.log(specialtyInput);
+            console.log(medicareDocs.length);
+            for(let y = 0; y < medicareDocs.length; y++){
+                console.log(`${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name}: ${medicareDocs[y].practices[0].phones[0].number}`);
+            }
+        } else {
+            for(let z = 0; z < medicareDocs.length; z++){
+                // if(medicareDocs[z].specialties){
+                //     if(medicareDocs[z].specialties.name.includes(undefined))return;
+                        if(medicareDocs[z].specialties[0].name.includes(specialtyInput)){
+                            console.log(`${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name}: ${medicareDocs[z].practices[0].phones[0].number}`);
+                        }
+                
             }
         }
     })
 });
+
+function removeEmptySpecialty(arr){
+    for (let a = 0; a < arr.length; a++){
+        if(arr[a].specialties.length === 0){
+            arr.splice(a, 1);
+        }
+    }
+}
