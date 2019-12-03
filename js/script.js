@@ -421,12 +421,13 @@ $('#find').on('click', (event)=>{
     event.preventDefault();
     let specialtyInput = $('input').val();
     medicareDocs = [];
+    $('a.collection-item').remove();
     $.ajax({
         url: `https://api.betterdoctor.com/2016-03-01/doctors?location=${latitude},${longitude},100&skip=2&limit=${limit}&user_key=${apiKey}`,
         type: "GET",
     }).then(function(data){
         apiObj = data;
-        // console.log(apiObj.data[0].specialties[0].name);
+        console.log(apiObj);
         // console.log($('select'));
         for(let i = 0; i < apiObj.data.length; i++){
             for(let x = 0; x < apiObj.data[i].insurances.length; x++){    
@@ -435,8 +436,10 @@ $('#find').on('click', (event)=>{
                 }
             }
         }
+        
         removeEmptySpecialty(medicareDocs);
-        console.log(medicareDocs);
+        console.log(deduplicate(medicareDocs,'npi'));
+        
         if(specialtyInput === "Choose your option"){
             console.log(specialtyInput);
             console.log(medicareDocs.length);
@@ -462,4 +465,17 @@ function removeEmptySpecialty(arr){
             arr.splice(a, 1);
         }
     }
+}
+
+function deduplicate(arr, key){
+    let index = {};
+    let dedupedArr =[];
+
+    for(let i = 0; i < arr.length; i++){
+        if(!index[arr[i][key]]) {
+            index[arr[i][key]] = true;
+            dedupedArr.push(arr[i]);
+        }
+    }
+    return dedupedArr;
 }
