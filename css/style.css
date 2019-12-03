@@ -21,6 +21,15 @@ header {
 
 .card-panel{
     background-color: cornsilk;
-    width: 200px;
-    height: 180px;
+    width: 250px;
+    height: 140px;
+}
+
+strong{
+    font-weight: bold;
+}
+
+li.active > div{
+    background-color: cornsilk;
+    color: #1976d2;
 }

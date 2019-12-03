@@ -453,30 +453,42 @@ $('#find').on('click', (event)=>{
             // console.log(medicareDocs.length);
             for(let y = 0; y < medicareDocs.length; y++){
                 $("ul.collapsible").prepend(`<li class="docs">
-                                                <div class="collapsible-header"><strong>${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[y].specialties[0].name}</em></div>
-                                                <div class="collapsible-body"><span><strong>${medicareDocs[y].practices[0].name}</strong></span></div>
+                                                <div class="collapsible-header"><i class="material-icons">contact_phone</i>&nbsp&nbsp&nbsp<strong>${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[y].specialties[0].name}</em></div>
+                                                <div class="collapsible-body"><span><strong>${medicareDocs[y].practices[0].name}</strong></span><br>
+                                                                                <span>${medicareDocs[y].practices[0].visit_address.street}</span><br>
+                                                                                <span>${medicareDocs[y].practices[0].visit_address.city},&nbsp${medicareDocs[y].practices[0].visit_address.state}&nbsp${medicareDocs[y].practices[0].visit_address.zip}</span><br><br>
+                                                                                <span><i class="material-icons">local_phone</i>&nbsp&nbsp&nbsp${medicareDocs[y].practices[0].phones[0].number}</span>
+                                                </div>
                                             </li>`);
                 // console.log(`${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}`);
             }
         } else {
-            for(let z = 0; z < medicareDocs.length; z++){
-                if(medicareDocs[z].specialties[0].name.includes(specialtyInput)){
+            for(let y = 0; y < medicareDocs.length; y++){
+                if(medicareDocs[y].specialties[0].name.includes(specialtyInput)){
                     $("ul.collapsible").prepend(`<li class="docs">
-                                                    <div class="collapsible-header"><strong>${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[z].specialties[0].name}</em></div>
-                                                    <div class="collapsible-body"><span><strong>${medicareDocs[z].practices[0].name}</strong></span></div>
-                                                </li>`);
-                        // console.log(`${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}`);
+                    <div class="collapsible-header"><i class="material-icons">contact_phone</i>&nbsp&nbsp&nbsp<strong>${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[y].specialties[0].name}</em></div>
+                    <div class="collapsible-body"><span><strong>${medicareDocs[y].practices[0].name}</strong></span><br>
+                                                    <span>${medicareDocs[y].practices[0].visit_address.street}</span><br>
+                                                    <span>${medicareDocs[y].practices[0].visit_address.city},&nbsp${medicareDocs[y].practices[0].visit_address.state}&nbsp${medicareDocs[y].practices[0].visit_address.zip}</span><br><br>
+                                                    <span><i class="material-icons">local_phone</i>&nbsp&nbsp&nbsp${medicareDocs[y].practices[0].phones[0].number}</span>
+                    </div>
+                </li>`);
+// console.log(`${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}`);
                     }
                 }
             if($('li.docs').length === 0){
                 alert('No providers found for that specialty. Below is a list of General Practitioners in your area.');
-                for(let a = 0; a < medicareDocs.length; a++){
-                    if(medicareDocs[a].specialties[0].name === "Internal Medicine" || medicareDocs[a].specialties[0].name === "Family Medicine"){
-                        $("ul.collapsible").prepend(`<li class"docs">
-                                                        <div class="collapsible-header"><strong>${medicareDocs[a].profile.first_name} ${medicareDocs[a].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[a].specialties[0].name}</em></div>
-                                                        <div class="collapsible-body"><span><strong>${medicareDocs[a].practices[0].name}</strong></span></div>
-                                                    </li>`);
-                    }
+                for(let y = 0; y < medicareDocs.length; y++){
+                    if(medicareDocs[y].specialties[0].name === "Internal Medicine" || medicareDocs[y].specialties[0].name === "Family Medicine"){
+                        $("ul.collapsible").prepend(`<li class="docs">
+                        <div class="collapsible-header"><i class="material-icons">contact_phone</i>&nbsp&nbsp&nbsp<strong>${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name}</strong>&nbsp-&nbsp<em>${medicareDocs[y].specialties[0].name}</em></div>
+                        <div class="collapsible-body"><span><strong>${medicareDocs[y].practices[0].name}</strong></span><br>
+                                                        <span>${medicareDocs[y].practices[0].visit_address.street}</span><br>
+                                                        <span>${medicareDocs[y].practices[0].visit_address.city},&nbsp${medicareDocs[y].practices[0].visit_address.state}&nbsp${medicareDocs[y].practices[0].visit_address.zip}</span><br><br>
+                                                        <span><i class="material-icons">local_phone</i>&nbsp&nbsp&nbsp${medicareDocs[y].practices[0].phones[0].number}</span>
+                        </div>
+                    </li>`);
+}
                 }
             }
         }
