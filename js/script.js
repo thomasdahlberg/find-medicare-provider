@@ -392,31 +392,33 @@ let specialtiesOptions = {
     386: "Addiction Psychology",
     387: "Addiction Psychiatry",
     388: "Addiction Medicine",
-    389: "Addiction Medicine",
+    389: "Addiction",
     390: "Addiction Counseling",
     391: "Acute Care Nurse Practitioner",
     392: "Acupuncture",
+    393: "All Medicare Providers",
 }
 
+// API GET that pulls location data of user
 $.ajax({
     url: `http://api.ipstack.com/check?access_key=fef26ea7f3f8cb548a3b9cafbf91346c`,
     type: "GET",
 }).then(function(data) {
-    console.log(data);
+    // console.log(data);
     latitude = parseFloat(data.latitude.toFixed(3));
     longitude = parseFloat(data.longitude.toFixed(3));
 });
 
-
+//Initializes dropdown menu and populates it with specialty options
 $(document).ready(function(){
     $('select').formSelect();
 });
 
 Object.keys(specialtiesOptions).forEach(element =>
     $('select').prepend(`<option value="${element}">${specialtiesOptions[element]}</options>`));
-$('select').prepend(`<option value="" disabled selected>Choose your option</option>`);
+$('select').prepend(`<option value="" disabled selected>All Medicare Providers</option>`);
 
-
+//Event Listener: Initiates API GET of Doctor Data
 $('#find').on('click', (event)=>{
     event.preventDefault();
     let specialtyInput = $('input').val();
@@ -427,7 +429,7 @@ $('#find').on('click', (event)=>{
         type: "GET",
     }).then(function(data){
         apiObj = data;
-        console.log(apiObj);
+        // console.log(apiObj);
         // console.log($('select'));
         for(let i = 0; i < apiObj.data.length; i++){
             for(let x = 0; x < apiObj.data[i].insurances.length; x++){    
@@ -437,23 +439,32 @@ $('#find').on('click', (event)=>{
             }
         }
         
+//Cleans up API data: Removes Objs w/o Specialty and dedupes medicareDocs
         removeEmptySpecialty(medicareDocs);
-        console.log(deduplicate(medicareDocs,'npi'));
+        deduplicate(medicareDocs,'npi');
         
-        if(specialtyInput === "Choose your option"){
-            console.log(specialtyInput);
-            console.log(medicareDocs.length);
+//Search Logic for returning doctor data to user based on specialty
+        if(specialtyInput === "All Medicare Providers"){
+            // console.log(specialtyInput);
+            // console.log(medicareDocs.length);
             for(let y = 0; y < medicareDocs.length; y++){
                 $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}</a>`);
-                console.log(`${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}`);
+                // console.log(`${medicareDocs[y].specialties[0].name}: ${medicareDocs[y].profile.first_name} ${medicareDocs[y].profile.last_name} - ${medicareDocs[y].practices[0].phones[0].number}`);
             }
         } else {
             for(let z = 0; z < medicareDocs.length; z++){
-                        if(medicareDocs[z].specialties[0].name.includes(specialtyInput)){
-                            $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}</a>`);
-                            console.log(`${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}`);
-                        }
-                
+                if(medicareDocs[z].specialties[0].name.includes(specialtyInput)){
+                    $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}</a>`);
+                        // console.log(`${medicareDocs[z].specialties[0].name}: ${medicareDocs[z].profile.first_name} ${medicareDocs[z].profile.last_name} - ${medicareDocs[z].practices[0].phones[0].number}`);
+                    }
+                }
+            if($('a.collection-item').length === 0){
+                alert('No providers found for that specialty. Below is a list of General Practitioners in your area.');
+                for(let a = 0; a < medicareDocs.length; a++){
+                    if(medicareDocs[a].specialties[0].name === "Internal Medicine" || medicareDocs[a].specialties[0].name === "Family Medicine"){
+                        $("div.collection").prepend(`<a href="#!" class="collection-item">${medicareDocs[a].specialties[0].name}: ${medicareDocs[a].profile.first_name} ${medicareDocs[a].profile.last_name} - ${medicareDocs[a].practices[0].phones[0].number}</a>`);
+                    }
+                }
             }
         }
     })
@@ -477,5 +488,5 @@ function deduplicate(arr, key){
             dedupedArr.push(arr[i]);
         }
     }
-    return dedupedArr;
+    medicareDocs = dedupedArr;
 }
