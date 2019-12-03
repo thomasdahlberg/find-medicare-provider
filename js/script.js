@@ -417,7 +417,7 @@ Object.keys(specialtiesOptions).forEach(element =>
 $('select').prepend(`<option value="" disabled selected>Choose your option</option>`);
 
 
-$('a').on('click', (event)=>{
+$('#find').on('click', (event)=>{
     event.preventDefault();
     let specialtyInput = $('input').val();
     medicareDocs = [];

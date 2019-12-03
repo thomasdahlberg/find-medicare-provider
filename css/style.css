@@ -1,3 +1,26 @@
-.waves-effect {
-    background-color:teal;
+header {
+    margin-bottom: 75px;
+}
+
+.input-field {
+    width: 55%;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    align-content: space-around;
+}
+
+.item {
+    margin: 25px 10px;
+}
+
+.card-panel{
+    background-color: cornsilk;
+    width: 200px;
+    height: 180px;
 }
